@@ -13,3 +13,5 @@ link do repo da versão em HTML, CSS e Javascript: [https://github.com/eddyzera/
 
 Roda a aplicação em modo de desenvolvimento.\
 Abra: [http://localhost:3000](http://localhost:3000).
+
+![Alt text](./Início.png)
