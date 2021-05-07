@@ -1,11 +1,19 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Minus from '../assets/minus.svg'
+import { AppContext } from '../provider/AppProvider'
 
 export default function Transaction() {
+
+    const { 
+        handleModalOpen, 
+        transaction,
+        handleDeleteTransactions
+    } = useContext(AppContext)
+
     return (
         <section id="transaction">
             <h2 className="sr-only">Transações</h2>
-            <a href="#" className="button new">+ Nova transação</a>
+            <a href="#" onClick={handleModalOpen} className="button new">+ Nova transação</a>
             <table id="data-table">
                 <thead>
                     <tr>
@@ -16,28 +24,31 @@ export default function Transaction() {
                     </tr>
                 </thead>
                 <tbody id="render-data">
-                    <tr>
-                        <td className="description">Web Site</td>
-                        <td className="income">R$: 500,00
-                        </td>
-                        <td className="date">00/00/00</td>
-                        <td>
-                            <button className="button-delete" >
-                            <img src={Minus} alt="remover transação" />
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="description">Luz</td>
-                        <td className="expense">R$: -500,00
-                        </td>
-                        <td className="date">00/00/00</td>
-                        <td>
-                            <button className="button-delete" >
-                            <img src={Minus} alt="remover transação" />
-                            </button>
-                        </td>
-                    </tr>
+                    { transaction.map(item => {
+                        return (
+                            <tr key={item.id}>
+                                <td className="description">
+                                    {item.description}
+                                </td>
+                                <td className={ Math.sign(item.value) === -1 ? "expense" : "income" }>
+                                    {item.value.toLocaleString("pt-BR", 
+                                        {style: "currency",currency: "BRL",}
+                                    )}
+                                </td>
+                                <td className="date">
+                                    { new Date(item.date).toLocaleDateString("pt-br") }
+                                </td>
+                                <td>
+                                    <button 
+                                        className="button-delete" 
+                                        onClick={() => handleDeleteTransactions(item.id)}
+                                    >
+                                        <img src={Minus} alt="remover transação" />
+                                    </button>
+                                </td>
+                            </tr>
+                        )
+                    }) }
                 </tbody>
             </table>
         </section>
